@@ -145,7 +145,7 @@ template <> struct MappingTraits<FormatStyle> {
 
     if (IO.outputting()) {
       StringRef StylesArray[] = { "LLVM",    "Google", "Chromium",
-                                  "Mozilla", "WebKit", "GNU" };
+                                  "Mozilla", "WebKit", "GNU", "Linux" };
       ArrayRef<StringRef> Styles(StylesArray);
       for (size_t i = 0, e = Styles.size(); i < e; ++i) {
         StringRef StyleName(Styles[i]);
@@ -501,6 +501,21 @@ FormatStyle getGNUStyle() {
   return Style;
 }
 
+FormatStyle getLinuxStyle() {
+  FormatStyle Style = getLLVMStyle();
+  Style.AlwaysBreakAfterDefinitionReturnType = true;
+  Style.BreakBeforeBinaryOperators = FormatStyle::BOS_All;
+  Style.BreakBeforeBraces = FormatStyle::BS_Linux;
+  Style.BreakBeforeTernaryOperators = true;
+  Style.Cpp11BracedListStyle = false;
+  Style.ColumnLimit = 80;
+  Style.IndentWidth = 8;
+  Style.UseTab = FormatStyle::UT_Always;
+  Style.SpaceBeforeParens = FormatStyle::SBPO_Always;
+  Style.Standard = FormatStyle::LS_Cpp03;
+  return Style;
+}
+
 FormatStyle getNoStyle() {
   FormatStyle NoStyle = getLLVMStyle();
   NoStyle.DisableFormat = true;
@@ -521,6 +536,8 @@ bool getPredefinedStyle(StringRef Name, FormatStyle::LanguageKind Language,
     *Style = getWebKitStyle();
   } else if (Name.equals_lower("gnu")) {
     *Style = getGNUStyle();
+  } else if (Name.equals_lower("linux")) {
+    *Style = getLinuxStyle();
   } else if (Name.equals_lower("none")) {
     *Style = getNoStyle();
   } else {
@@ -1398,7 +1415,7 @@ LangOptions getFormattingLangOpts(const FormatStyle &Style) {
 
 const char *StyleOptionHelpDescription =
     "Coding style, currently supports:\n"
-    "  LLVM, Google, Chromium, Mozilla, WebKit.\n"
+    "  LLVM, Google, Chromium, Mozilla, WebKit, Linux.\n"
     "Use -style=file to load style configuration from\n"
     ".clang-format file located in one of the parent\n"
     "directories of the source file (or current\n"

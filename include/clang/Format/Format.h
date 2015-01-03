@@ -503,6 +503,10 @@ FormatStyle getWebKitStyle();
 /// http://www.gnu.org/prep/standards/standards.html
 FormatStyle getGNUStyle();
 
+/// \brief Returns a format style complying with Linux Coding Standards:
+/// https://www.kernel.org/doc/Documentation/CodingStyle
+FormatStyle getLinuxStyle();
+
 /// \brief Returns style indicating formatting should be not applied at all.
 FormatStyle getNoStyle();
 
